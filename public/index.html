@@ -4,6 +4,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css" />
+		<title>Nano Node Agent</title>
 	</head>
 
 	<body>
@@ -24,6 +25,22 @@
 			<section class="hero">
 				<div class="hero-body">
 					<div class="container">
+						<center>
+							<b-tooltip label="Donate NANO " always class="is-hidden-mobile" type="is-dark">
+								<img alt="Deposit NANO" v-bind:src="'https://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=' + unano" />
+							</b-tooltip>
+
+							<div class="has-text-centered box">
+								<p class="is-hidden-mobile">{{ unano }}</p>
+							</div>
+						</center>
+					</div>
+				</div>
+			</section>
+
+			<section class="hero">
+				<div class="hero-body">
+					<div class="container">
 						<h1 class="has-text-centered subtitle">
 							Memory
 						</h1>
@@ -35,9 +52,46 @@
 				</div>
 			</section>
 
+			<section class="hero">
+				<div class="hero-body">
+					<div class="container">
+						<h1 class="has-text-centered subtitle">
+							System Load
+						</h1>
+
+						<b-progress :value="load1" :max="1" size="is-large" show-value>
+							1 minute : {{ (load1*100).toFixed(1) }} %
+						</b-progress>
+						<b-progress :value="load1" :max="1" size="is-large" show-value>
+							5 minute : {{ (load1*100).toFixed(1) }} %
+						</b-progress>
+						<b-progress :value="load1" :max="1" size="is-large" show-value>
+							15 minute : {{ (load1*100).toFixed(1) }} %
+						</b-progress>
+					</div>
+				</div>
+			</section>
+
+			<section class="hero">
+				<div class="hero-body">
+					<div class="container">
+						<div class="columns box">
+							<div class="column is-6">
+								Follow or Tweet To Node Maintainer @ Twitter
+							</div>
+							<div class="column">
+								<a :href="'https://twitter.com/' + utwitter ">Follow @{{utwitter}}</a>
+							</div>
+							<div class="column">
+								<a :href="'https://twitter.com/intent/tweet?screen_name=' + utwitter ">Tweet to @{{utwitter}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
 			<footer class="footer">
 				<div class="content has-text-centered">
-					<p>Built With ❤ By NANO Currency Lovers.</p>
 					<p><strong>Improve Me </strong> on <a href="https://github.com/besoeasy/nanonodeagent">Github</a>.</p>
 				</div>
 			</footer>
@@ -66,11 +120,17 @@
 							method: 'GET',
 							url: '/status',
 						}).then((response) => {
+							this.unano = response.data.owner.nano;
+							this.utwitter = response.data.owner.twitter;
+
 							this.totalmemory = response.data.totalmemory;
 							this.freememory = response.data.freememory;
 							this.architecture = response.data.architecture;
 							this.os = response.data.os;
 							this.uptime = response.data.uptime;
+							this.load1 = response.data.load[0];
+							this.load2 = response.data.load[1];
+							this.load3 = response.data.load[2];
 						});
 					},
 				},

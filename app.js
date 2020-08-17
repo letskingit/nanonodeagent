@@ -1,3 +1,4 @@
+const config = require('./config');
 const express = require('express');
 const axios = require('axios').default;
 const cors = require('cors');
@@ -8,7 +9,7 @@ const app = express();
 
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000,
-	max: 999,
+	max: config.rpccalllimit,
 });
 
 const allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
@@ -19,31 +20,35 @@ app.use(express.json());
 app.use(limiter);
 app.use(express.static('public'));
 
-app.all('/rpc', async (req, res) => {
-	console.log(req.body.action);
-
-	if (!req.body.action || allowedActions.indexOf(req.body.action) === -1) {
+app.all('/rpc', (req, res) => {
+	if (os.loadavg()[0] > 0.9) {
 		return res.status(500).json({
-			error: `Action ${req.body.action} not allowed`,
+			error: `Overloaded, Let me rest My Man !`,
 		});
 	} else {
-		axios({
-			method: 'post',
-			url: 'http://127.0.0.1:7076',
-			data: req.body,
-		})
-			.then(async (results) => {
-				res.json(results.data);
-			})
-			.catch(function (error) {
-				return res.status(500).json({
-					error: `Error Connecting With NANO Node`,
-				});
+		if (!req.body.action || allowedActions.indexOf(req.body.action) === -1) {
+			return res.status(500).json({
+				error: `Action ${req.body.action} not allowed`,
 			});
+		} else {
+			return axios({
+				method: 'post',
+				url: 'http://127.0.0.1:7076',
+				data: req.body,
+			})
+				.then((results) => {
+					return res.json(results.data);
+				})
+				.catch(function (error) {
+					return res.status(500).json({
+						error: `Error Connecting With NANO Node`,
+					});
+				});
+		}
 	}
 });
 
-app.all('/status', async (req, res) => {
+app.all('/status', (req, res) => {
 	res.json({
 		architecture: os.arch(),
 		ostype: os.type(),
@@ -52,6 +57,10 @@ app.all('/status', async (req, res) => {
 		totalmemory: os.totalmem(),
 		freememory: os.freemem(),
 		load: os.loadavg(),
+		owner: {
+			nano: config.yournanoaddress,
+			twitter: config.yourtwitterusername,
+		},
 	});
 });
 
@@ -59,4 +68,4 @@ app.all('*', function (req, res) {
 	res.redirect('/');
 });
 
-app.listen(process.env.PORT || 5000, process.env.PUBLIC == 'true' ? '0.0.0.0' : '127.0.0.1');
+app.listen(process.env.PORT || config.port, process.env.PUBLIC == 'true' ? '0.0.0.0' : '127.0.0.1');

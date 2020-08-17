@@ -1,14 +1,14 @@
-npm start
+edit config.json
 
+npm start
 
 ## features
 
-Rate limiting 
+Rate limiting
 
-Rpc Proxy 
+Rpc Proxy
 
 Node Monitor
-
 
 ## features coming
 
@@ -16,5 +16,4 @@ load monitor
 
 telegram notificatios & monitor
 
-downtime email 
-
+downtime email
