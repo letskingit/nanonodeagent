@@ -68,4 +68,4 @@ app.all('*', function (req, res) {
 	res.redirect('/');
 });
 
-app.listen(process.env.PORT || config.port, process.env.PUBLIC == 'true' ? '0.0.0.0' : '127.0.0.1');
+app.listen(process.env.PORT || config.port, '0.0.0.0');
