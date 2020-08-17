@@ -8,7 +8,7 @@ const app = express();
 
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000,
-	max: 99,
+	max: 999,
 });
 
 const allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
