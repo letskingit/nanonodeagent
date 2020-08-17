@@ -27,7 +27,7 @@ app.all('/', async (req, res) => {
 	} else {
 		axios({
 			method: 'post',
-			url: 'http://35.188.62.54:7076',
+			url: 'http://127.0.0.1:7076',
 			data: req.body,
 		}).then(async (results) => {
 			res.json(results.data);
