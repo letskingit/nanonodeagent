@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css" />
+	</head>
+
+	<body>
+		<div id="app">
+			<section class="hero">
+				<div class="hero-body">
+					<div class="container">
+						<h1 class="title">
+							{{ os }} [{{ architecture }}]
+						</h1>
+						<h2 class="subtitle">
+							Uptime : {{ uptime }} Seconds
+						</h2>
+					</div>
+				</div>
+			</section>
+
+			<section class="hero">
+				<div class="hero-body">
+					<div class="container">
+						<h1 class="has-text-centered subtitle">
+							Memory
+						</h1>
+
+						<b-progress :value="freememory" :max="totalmemory" size="is-large" show-value>
+							{{ (freememory/1000000000).toFixed(4) }} GB Free / {{ (totalmemory/1000000000).toFixed(4) }} GB Total
+						</b-progress>
+					</div>
+				</div>
+			</section>
+
+			<footer class="footer">
+				<div class="content has-text-centered">
+					<p>Built With ❤ By NANO Currency Lovers.</p>
+					<p><strong>Improve Me </strong> on <a href="https://github.com/besoeasy/nanonodeagent">Github</a>.</p>
+				</div>
+			</footer>
+		</div>
+
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script>
+			new Vue({
+				el: '#app',
+				data() {
+					return {
+						freememory: 0,
+						totalmemory: 0,
+						os: '',
+						uptime: 0,
+					};
+				},
+				created() {
+					this.timer = setInterval(this.call_functions, 5000);
+				},
+				methods: {
+					call_functions() {
+						axios({
+							method: 'GET',
+							url: '/status',
+						}).then((response) => {
+							this.totalmemory = response.data.totalmemory;
+							this.freememory = response.data.freememory;
+							this.architecture = response.data.architecture;
+							this.os = response.data.os;
+							this.uptime = response.data.uptime;
+						});
+					},
+				},
+				beforeDestroy() {
+					clearInterval(this.timer);
+				},
+			});
+		</script>
+	</body>
+</html>

@@ -2,22 +2,24 @@ const express = require('express');
 const axios = require('axios').default;
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const os = require('os');
 
 const app = express();
 
 const limiter = rateLimit({
 	windowMs: 1 * 60 * 1000,
-	max: 60,
+	max: 99,
 });
+
+const allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
 
 app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json());
 app.use(limiter);
+app.use(express.static('public'));
 
-const allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
-
-app.all('/', async (req, res) => {
+app.all('/rpc', async (req, res) => {
 	console.log(req.body.action);
 
 	if (!req.body.action || allowedActions.indexOf(req.body.action) === -1) {
@@ -35,9 +37,20 @@ app.all('/', async (req, res) => {
 	}
 });
 
+app.all('/status', async (req, res) => {
+	res.json({
+		architecture: os.arch(),
+		ostype: os.type(),
+		os: os.version(),
+		uptime: os.uptime(),
+		totalmemory: os.totalmem(),
+		freememory: os.freemem(),
+		load: os.loadavg(),
+	});
+});
+
 app.all('*', function (req, res) {
 	res.redirect('https://github.com/besoeasy/nanonodeagent');
 });
 
-app.listen(process.env.PORT || 5000, process.env.PUBLIC == 'true' ? '0.0.0.0': '127.0.0.1');
-
+app.listen(process.env.PORT || 5000, process.env.PUBLIC == 'true' ? '0.0.0.0' : '127.0.0.1');
