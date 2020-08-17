@@ -39,4 +39,5 @@ app.all('*', function (req, res) {
 	res.redirect('https://github.com/besoeasy/nanonodeagent');
 });
 
-app.listen(process.env.PORT || 5000, '0.0.0.0');
+app.listen(process.env.PORT || 5000, process.env.PUBLIC == 'true' ? '0.0.0.0': '127.0.0.1');
+
