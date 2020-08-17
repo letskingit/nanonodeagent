@@ -31,9 +31,15 @@ app.all('/rpc', async (req, res) => {
 			method: 'post',
 			url: 'http://127.0.0.1:7076',
 			data: req.body,
-		}).then(async (results) => {
-			res.json(results.data);
-		});
+		})
+			.then(async (results) => {
+				res.json(results.data);
+			})
+			.catch(function (error) {
+				return res.status(500).json({
+					error: `Error Connecting With NANO Node`,
+				});
+			});
 	}
 });
 
@@ -50,7 +56,7 @@ app.all('/status', async (req, res) => {
 });
 
 app.all('*', function (req, res) {
-	res.redirect('https://github.com/besoeasy/nanonodeagent');
+	res.redirect('/');
 });
 
 app.listen(process.env.PORT || 5000, process.env.PUBLIC == 'true' ? '0.0.0.0' : '127.0.0.1');
