@@ -13,7 +13,7 @@
 				<div class="hero-body">
 					<div class="container">
 						<h1 class="title">
-							{{ os }} [{{ architecture }}]
+							{{ ostype }} [{{ architecture }}]
 						</h1>
 						<h2 class="subtitle">
 							Uptime : {{ uptime }} Seconds
@@ -107,7 +107,7 @@
 					return {
 						freememory: 0,
 						totalmemory: 0,
-						os: '',
+						ostype: '',
 						uptime: 0,
 					};
 				},
@@ -126,7 +126,7 @@
 							this.totalmemory = response.data.totalmemory;
 							this.freememory = response.data.freememory;
 							this.architecture = response.data.architecture;
-							this.os = response.data.os;
+							this.ostype = response.data.ostype;
 							this.uptime = response.data.uptime;
 							this.load1 = response.data.load[0];
 							this.load2 = response.data.load[1];

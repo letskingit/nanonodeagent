@@ -52,7 +52,6 @@ app.all('/status', (req, res) => {
 	res.json({
 		architecture: os.arch(),
 		ostype: os.type(),
-		os: os.version(),
 		uptime: os.uptime(),
 		totalmemory: os.totalmem(),
 		freememory: os.freemem(),
