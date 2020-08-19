@@ -1,8 +1,10 @@
 {
-  "nodes":[
-{"url":"https://proxy.nanos.cc/proxy"},
-{"url":"https://mynano.ninja/api/node"}
-]
-  
-  
+  "nodes": [
+    {
+      "url": "https://proxy.nanos.cc/proxy"
+    },
+    {
+      "url": "https://mynano.ninja/api/node"
+    }
+  ]
 }
