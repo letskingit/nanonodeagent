@@ -2,26 +2,17 @@ const config = require('./config');
 const express = require('express');
 const axios = require('axios').default;
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
 const os = require('os');
-
 const app = express();
-
-const limiter = rateLimit({
-	windowMs: 1 * 60 * 1000,
-	max: config.rpccalllimit,
-});
 
 const allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
 
-app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json());
-app.use(limiter);
 app.use(express.static('public'));
 
 app.all('/rpc', (req, res) => {
-	if (os.loadavg()[0] > 0.9) {
+	if (os.loadavg()[0] > 0.95) {
 		return res.status(500).json({
 			error: `Overloaded, Let me rest My Man !`,
 		});
