@@ -1,11 +1,11 @@
-const config = require('./config');
 const express = require('express');
 const axios = require('axios').default;
 const cors = require('cors');
 const os = require('os');
 const app = express();
 
-const allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
+var nodedata = { twitter: process.env.twitter || 'akabesoeasy', nano: process.env.nano || 'nano_3sumsrd8ckhokkb7379p49c1ndzpi7f94bzkxqozrfs8fk38qc1awn9k1kyb', port: process.env.PORT || 8888 };
+var allowedActions = ['account_history', 'account_info', 'accounts_frontiers', 'accounts_balances', 'accounts_pending', 'block', 'blocks', 'block_count', 'blocks_info', 'bootstrap_status', 'delegators_count', 'pending', 'process', 'representatives_online', 'validate_account_number'];
 
 app.use(cors());
 app.use(express.json());
@@ -47,10 +47,7 @@ app.all('/status', (req, res) => {
 		totalmemory: os.totalmem(),
 		freememory: os.freemem(),
 		load: os.loadavg(),
-		owner: {
-			nano: config.yournanoaddress,
-			twitter: config.yourtwitterusername,
-		},
+		owner: nodedata,
 	});
 });
 
@@ -58,4 +55,4 @@ app.all('*', function (req, res) {
 	res.redirect('/');
 });
 
-app.listen(process.env.PORT || config.port, '0.0.0.0');
+app.listen(nodedata.port, '0.0.0.0');
