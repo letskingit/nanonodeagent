@@ -1,0 +1,3 @@
+{
+	"nodes": ["https://api.nanex.cc", "https://vault.nanocrawler.cc/api/node-api", "https://proxy.nanos.cc/proxy"]
+}
