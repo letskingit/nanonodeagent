@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "app.js",
 	"scripts": {
-		"start": "git pull & node app.js",
+		"start": "git pull & npm i & node app.js",
 		"dev": "nodemon app.js"
 	},
 	"author": "",
